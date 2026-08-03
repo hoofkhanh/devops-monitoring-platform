@@ -69,6 +69,21 @@ never edit a migration that's already merged, add a new one instead. Don't
 restate the current table/column layout here either; read the latest
 migration files for the actual schema.
 
+## API Observability Rule
+
+Every API must always be logged.
+
+All API requests and responses must include:
+- request ID
+- HTTP method
+- endpoint
+- status code
+- latency
+- error information
+
+Implement logging at middleware/filter/interceptor level.
+Never log sensitive information.
+
 ## Testing (mandatory)
 
 Every new or changed function in `handler`, `service`, or `repository` ships
