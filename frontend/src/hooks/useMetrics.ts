@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchServerMetrics } from '../services/api';
+import { fetchMetrics } from '../services/api';
 import type { Metric } from '../types/api';
 
-export function useServerMetrics(serverId: number) {
+export function useMetrics() {
   const [metrics, setMetrics] = useState<Metric[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -10,27 +10,21 @@ export function useServerMetrics(serverId: number) {
   useEffect(() => {
     let cancelled = false;
 
-    fetchServerMetrics(serverId)
+    fetchMetrics()
       .then((data) => {
-        if (!cancelled) {
-          setMetrics(data);
-        }
+        if (!cancelled) setMetrics(data);
       })
       .catch((err: Error) => {
-        if (!cancelled) {
-          setError(err.message);
-        }
+        if (!cancelled) setError(err.message);
       })
       .finally(() => {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       });
 
     return () => {
       cancelled = true;
     };
-  }, [serverId]);
+  }, []);
 
   return { metrics, loading, error };
 }

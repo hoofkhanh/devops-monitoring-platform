@@ -13,10 +13,6 @@ async function request<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function fetchServers() {
-  return request<import('../types/api').Server[]>('/servers');
-}
-
-export async function fetchServerMetrics(serverId: number) {
-  return request<import('../types/api').Metric[]>(`/servers/${serverId}/metrics`);
+export async function fetchMetrics() {
+  return request<import('../types/api').Metric[]>('/metrics');
 }

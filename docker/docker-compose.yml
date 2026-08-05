@@ -38,6 +38,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+    image: "hoofkhanh/devops-monitoring-backend:latest"
     container_name: devops-backend
     restart: unless-stopped
     depends_on:
@@ -58,6 +59,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+    image: "hoofkhanh/devops-monitoring-frontend:latest"
     container_name: devops-frontend
     restart: unless-stopped
     depends_on:

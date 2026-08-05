@@ -6,4 +6,4 @@ cd "$(dirname "$0")"
 docker compose \
   --env-file ../backend/.env \
   --env-file ../frontend/.env \
-  up -d --build backend frontend
+  up -d --build
