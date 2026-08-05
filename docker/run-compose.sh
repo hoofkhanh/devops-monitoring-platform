@@ -2,4 +2,8 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
-docker compose --env-file ../backend/.env.backend up -d --build backend
+
+docker compose \
+  --env-file ../backend/.env \
+  --env-file ../frontend/.env \
+  up -d --build backend frontend

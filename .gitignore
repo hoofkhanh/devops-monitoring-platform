@@ -29,6 +29,8 @@ go.work.sum
 *.env
 **/.env*
 
+node_modules/
+
 # Editor/IDE
 # .idea/
 # .vscode/
