@@ -14,7 +14,7 @@ func Connect() (*sql.DB, error) {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	name := os.Getenv("DB_NAME")
-	
+
 	if host == "" || port == "" || user == "" || password == "" || name == "" {
 		return nil, fmt.Errorf("database environment variables are not fully configured")
 	}
