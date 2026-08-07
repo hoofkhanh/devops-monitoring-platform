@@ -19,7 +19,8 @@ while true; do
     echo "DISK USAGE: $disk_usage%"
     echo
     
-    curl -X POST http://localhost:8080/api/metrics \
+    # 80 is a nginx's port, which is a reverse proxy for the backend API
+    curl -X POST http://localhost:80/api/metrics \
         -H "Content-type: application/json" \
         -d '{"cpu": '"$cpu_usage"', "memory": '"$memory_usage"', "disk": '"$disk_usage"'}'
 

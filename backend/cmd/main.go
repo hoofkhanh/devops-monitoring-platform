@@ -49,7 +49,8 @@ func main() {
 func newRouter(h *handler.Handler) chi.Router {
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://127.0.0.1:5173", "http://localhost:5173"},
+		// AllowedOrigins:   []string{"http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:80", "http://localhost:80"},
+		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodOptions},
 		AllowedHeaders:   []string{"Accept", "Content-Type", "Authorization"},
 		ExposedHeaders:   []string{"Link"},
