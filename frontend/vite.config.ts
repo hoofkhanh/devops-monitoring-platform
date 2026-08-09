@@ -7,6 +7,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    server: Number.isInteger(frontendPort) ? { port: frontendPort } : undefined,
+    server: {
+	    host: "0.0.0.0",
+	    ...(Number.isInteger(frontendPort) && { port: frontendPort }),
+	    allowedHosts: true,
+	},
   };
 });
