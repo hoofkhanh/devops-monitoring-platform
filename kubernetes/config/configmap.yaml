@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: devops-monitoring-platform
+data:
+  # Backend config
+  PORT: "8080"
+
+  POSTGRES_DB: "devops_monitoring"
+  POSTGRES_PORT: "5432"
+
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "devops_monitoring"
+  APP_ENV: "development"
+
+  # Frontend config
+  VITE_API_URL: "/api"
