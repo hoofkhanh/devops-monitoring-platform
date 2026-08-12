@@ -13,3 +13,20 @@ spec:
     - port: 5432
       targetPort: 5432
       protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin-service
+  namespace: devops-monitoring-platform
+  labels:
+    app: pgadmin
+spec:
+  type: ClusterIP
+  selector:
+    app: pgadmin
+  ports:
+    - port: 5050
+      targetPort: 80
+      protocol: TCP

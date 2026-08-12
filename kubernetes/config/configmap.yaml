@@ -10,10 +10,12 @@ data:
   POSTGRES_DB: "devops_monitoring"
   POSTGRES_PORT: "5432"
 
-  DB_HOST: "postgres"
+  DB_HOST: "database-service"
   DB_PORT: "5432"
   DB_NAME: "devops_monitoring"
   APP_ENV: "development"
+  
+  PGADMIN_PORT: "5050"
 
   # Frontend config
   VITE_API_URL: "/api"
