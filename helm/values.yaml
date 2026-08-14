@@ -1,0 +1,22 @@
+namespace: devops-monitoring-platform
+
+frontend:
+  replicas: 2
+  image:
+    repository: hoofkhanh/devops-monitoring-frontend
+    tag: latest
+    pullPolicy: ifNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+  service:
+    port: 80
+    targetPort: 5173
+
+ingress:
+  className: nginx
+  host: hoofkhanh.com
