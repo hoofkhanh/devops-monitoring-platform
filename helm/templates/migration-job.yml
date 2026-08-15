@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "myapp.fullname" . }}-db-migration
+  namespace: {{ .Values.namespace }}
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migration
+          image: postgres:16-alpine
+          command: ["/bin/bash", "/scripts/init-db.sh"]
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "myapp.fullname" . }}-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myapp.fullname" . }}-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "myapp.fullname" . }}-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "myapp.fullname" . }}-config
+                  key: POSTGRES_PORT
+            # use the service name of the database service as the host
+            - name: PGHOST 
+              value:  {{ include "myapp.fullname" . }}-database
+          volumeMounts:
+            - name: migration-script
+              mountPath: /scripts
+            - name: migrations
+              mountPath: /migrations
+      volumes:
+        - name: migration-script
+          configMap:
+            name: migration-script
+            defaultMode: 0755
+        - name: migrations
+          configMap:
+            name: db-migrations

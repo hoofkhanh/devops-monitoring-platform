@@ -1,7 +1,57 @@
 namespace: devops-monitoring-platform
 
+db:
+  DB_USER: root
+  DB_PASSWORD: root
+  POSTGRES_USER: root
+  POSTGRES_PASSWORD: root
+  PGADMIN_DEFAULT_EMAIL: root@gmail.com
+  PGADMIN_DEFAULT_PASSWORD: root
+  POSTGRES_DB: devops_monitoring
+  POSTGRES_PORT: "5432"
+  DB_PORT: "5432"
+  DB_NAME: "devops_monitoring"
+  PGADMIN_PORT: "5050"
+  PGADMIN_TARGET_PORT: "80"
+  service:
+    port: "5432"
+    targetPort: "5432"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  storage:
+    size: 1Gi
+  pgadmin:
+    storage: 2Gi
+    replicas: "1"
+    image:  
+      repository: dpage/pgadmin4
+      tag: "8.12"
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 200m
+        memory: 250Mi
+      limits:
+        cpu: 400m
+        memory: 500Mi
+  image:  
+    repository: postgres
+    tag: 16-alpine
+    pullPolicy: IfNotPresent
+
+backend:
+  BACKEND_PORT: "8080"
+  APP_ENV: development
+  
+
 frontend:
-  replicas: 2
+  VITE_API_URL: "/api"
+  replicas: "2"
   image:
     repository: hoofkhanh/devops-monitoring-frontend
     tag: latest
@@ -14,8 +64,8 @@ frontend:
       cpu: 300m
       memory: 256Mi
   service:
-    port: 80
-    targetPort: 5173
+    port: "80"
+    targetPort: "5173"
 
 ingress:
   className: nginx

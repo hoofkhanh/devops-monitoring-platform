@@ -3,7 +3,22 @@ kind: ConfigMap
 metadata:
   name: {{ include "myapp.fullname" . }}-config
   namespace: {{ .Values.namespace }}
-data:
-  # Frontend config
-  VITE_API_URL: "/api"
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
 
+data:
+  # Backend config
+  PORT: {{ .Values.backend.BACKEND_PORT | quote }}
+
+  POSTGRES_DB: {{ .Values.db.POSTGRES_DB | quote }}
+  POSTGRES_PORT: {{ .Values.db.POSTGRES_PORT | quote }}
+
+  DB_HOST: {{ include "myapp.fullname" . }}-backend
+  DB_PORT: {{ .Values.db.DB_PORT | quote }}
+  DB_NAME: {{ .Values.db.DB_NAME | quote }}
+  APP_ENV: {{ .Values.backend.APP_ENV | quote }}
+
+  PGADMIN_PORT: {{ .Values.db.PGADMIN_PORT | quote }}
+
+  # Frontend config
+  VITE_API_URL: {{ .Values.frontend.VITE_API_URL | quote }}
