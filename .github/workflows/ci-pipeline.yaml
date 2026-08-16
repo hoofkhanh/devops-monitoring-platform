@@ -117,6 +117,8 @@ jobs:
         with:
           context: frontend
           push: true
+          build-args: |
+            VITE_API_URL=/api
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/devops-monitoring-frontend:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/devops-monitoring-frontend:${{ github.sha }}
