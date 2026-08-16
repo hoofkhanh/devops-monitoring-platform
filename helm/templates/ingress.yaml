@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: {{ .Values.ingress.className }}
   rules:
-    - host: {{ .Values.ingress.host | quote }}
+    - host: {{ .Values.ingress.host | default "hoofkhanh.com" | quote }}
       http:
         paths:
           - path: /
@@ -15,11 +15,11 @@ spec:
               service:
                 name: {{ include "myapp.fullname" . }}-frontend
                 port:
-                  number: 80
+                  number: {{ .Values.frontend.service.targetPort }}
           - path: /api
             pathType: Prefix
             backend:
               service:
                 name: {{ include "myapp.fullname" . }}-backend
                 port:
-                  number: 8080
+                  number: {{ .Values.backend.BACKEND_PORT }}

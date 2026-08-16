@@ -1,22 +1,9 @@
-# #!/bin/bash
-
-# set -e
-
-# NAMESPACE="devops-monitoring-platform"
-
-# kubectl create configmap migration-script \
-#   --from-file=init-db.sh=../../docker/init-db.sh \
-#   -n "$NAMESPACE"
-
-# kubectl create configmap db-migrations \
-#   --from-file=../../backend/migrations \
-#   -n "$NAMESPACE"
-
-# helm upgrade --install dev ./helm \
-#   -n "$NAMESPACE"
-#   -- create-namespace
+#!/bin/bash
 
 set -e
+
+read -rp "Enter backend hostname: " HOSTNAME
+HOSTNAME=${HOSTNAME:-hoofkhanh.com}
 
 NAMESPACE="devops-monitoring-platform"
 
@@ -44,7 +31,11 @@ echo
 echo "==========================INSTALL HELM============================"
 helm upgrade --install dev ../helm \
   -n "$NAMESPACE" \
+  --set ingress.host="$HOSTNAME" \
   --create-namespace
+
+
+kubectl rollout restart deployment "dev-${NAMESPACE}-frontend" -n "$NAMESPACE"
 echo "==========================INSTALL HELM============================"
 echo
 
@@ -59,3 +50,10 @@ echo "==========================VERIFY HELM RESOURCES DEPLOYED==================
 helm list --namespace "$NAMESPACE"
 echo "==========================VERIFY HELM RESOURCES DEPLOYED============================"
 echo
+
+# config the ingress host into the /etc/hosts file
+INGRESS_ADDRESS=$(kubectl get ingress -n devops-monitoring-platform | grep "nginx" | awk '{print $4}')
+ESCAPED_IP=$(printf '%s\n' "$INGRESS_ADDRESS" | sed 's/\./\\./g')
+sudo -k sed -i "s/^${ESCAPED_IP}.*$/${INGRESS_ADDRESS} $HOSTNAME/" /etc/hosts
+
+echo "url: http://$HOSTNAME"

@@ -47,7 +47,17 @@ db:
 backend:
   BACKEND_PORT: "8080"
   APP_ENV: development
-  
+  replicas: 2
+  image:
+    repository: hoofkhanh/devops-monitoring-backend 
+    tag: latest
+  resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
 
 frontend:
   VITE_API_URL: "/api"
@@ -65,8 +75,7 @@ frontend:
       memory: 256Mi
   service:
     port: "80"
-    targetPort: "5173"
+    targetPort: "80"
 
 ingress:
   className: nginx
-  host: hoofkhanh.com
