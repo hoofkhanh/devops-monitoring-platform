@@ -20,7 +20,7 @@ while true; do
     echo
     
     # 80 is a nginx's port, which is a reverse proxy for the backend API
-    curl -X POST http://localhost:80/api/metrics \
+    curl -X POST http://nhi.com:80/api/metrics \
         -H "Content-type: application/json" \
         -d '{"cpu": '"$cpu_usage"', "memory": '"$memory_usage"', "disk": '"$disk_usage"'}'
 

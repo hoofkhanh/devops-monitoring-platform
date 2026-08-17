@@ -1,21 +1,32 @@
+#!/bin/bash
+set -euo pipefail
 
-# sudo nano /etc/systemd/system/monitoring-agent.service
-# [Unit]
-# Description=Devops Monitoring Agent
-# After=network.target
+sudo -v || exit 1
 
-# [Service]
-# Type=simple
-# ExecStart=/home/dell/pet-projecs/devops-monitoring-platform/monitoring-agent/collect-metrics.sh
-# Restart=always
-# RestartSec=5
+# Set up a systemd service to run the monitoring agent script in the background
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# [Install]
-# WantedBy=multi-user.target
+sudo tee /etc/systemd/system/monitoring-agent.service > /dev/null <<EOF
+[Unit]
+Description=Devops Monitoring Agent
+After=network.target
 
+[Service]
+Type=simple
+ExecStart=$PROJECT_DIR/monitoring-agent/collect-metrics.sh
+Restart=always
+RestartSec=5
 
-# sudo chmod u+x  /etc/systemd/system/monitoring-agent.service
+[Install]
+WantedBy=multi-user.target
+EOF
 
-# sudo systemctl daemon-reload
-# sudo systemctl enable monitoring-agent
-# sudo systemctl start monitoring-agent
+sudo chmod u+x "$PROJECT_DIR/monitoring-agent/collect-metrics.sh"
+sudo systemctl daemon-reload
+sudo systemctl start monitoring-agent
+
+# Run helm install script to deploy the application
+sudo chmod u+x "$PROJECT_DIR/helm/run-helm-install.sh"
+cd "$PROJECT_DIR/helm"
+./run-helm-install.sh

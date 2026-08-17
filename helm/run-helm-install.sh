@@ -52,8 +52,16 @@ echo "==========================VERIFY HELM RESOURCES DEPLOYED==================
 echo
 
 # config the ingress host into the /etc/hosts file
-INGRESS_ADDRESS=$(kubectl get ingress -n devops-monitoring-platform | grep "nginx" | awk '{print $4}')
+INGRESS_ADDRESS=$(kubectl get ingress dev-devops-monitoring-platform-ingress \
+  -n devops-monitoring-platform -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ESCAPED_IP=$(printf '%s\n' "$INGRESS_ADDRESS" | sed 's/\./\\./g')
-sudo -k sed -i "s/^${ESCAPED_IP}.*$/${INGRESS_ADDRESS} $HOSTNAME/" /etc/hosts
+
+if grep -q "^${ESCAPED_IP}" /etc/hosts; then
+    sudo sed -i "s/^${ESCAPED_IP}.*$/${INGRESS_ADDRESS} $HOSTNAME/" /etc/hosts
+else
+    sudo sh -c "echo '$INGRESS_ADDRESS $HOSTNAME' >> /etc/hosts"
+fi
+
+sed -i "s|http://[^/]*|http://$HOSTNAME:80|" ../monitoring-agent/collect-metrics.sh
 
 echo "url: http://$HOSTNAME"
